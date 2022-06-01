@@ -1,0 +1,109 @@
+.screen {
+    padding: 1;
+     /* marginHorizontal: 20, */
+    /* paddingHorizontal: 20, */
+     /* height: '100%', */
+     /* width: '100%', */
+     /* borderColor: 'black', */
+     /* borderWidth: 10, */
+    flex: 1;
+  }
+  .imgcnt {
+    flex: 2
+  }
+
+  .desccont {
+    flex: 2;
+     /* marginVertical: 50, */
+    border-Color: 'black';
+     /* borderWidth: 1, */
+    border-Radius: 10;
+    margin-Top: 10;
+    overflow: 'hidden';
+    padding: 10,
+  }
+  .Daycont {
+     /* flex: 1, */
+    flex-Direction: 'row';
+    justify-Content: 'space-between';
+    /* marginVertical: 10; */
+    align-Items: 'flex-end';
+  }
+  .progreescnt {
+    flex: 2;
+     /* paddingHorizontal: 20, */
+    justify-Content: 'flex-end',
+     /* borderColor: 'black', */
+     /* borderWidth: 10, */
+  }
+  .img {
+    width: '100%';
+    height: '100%';
+    /* border-Radius: 1; */
+     /* flex:1 */
+  }
+  .desc {
+    font-Size: 20;
+    align-Items:'center'
+  }
+  .btn {
+    border-Radius: 10,
+  }
+  .progreesbar {
+    height: 10;
+    border-Radius: 10
+  }
+  .action {
+     /* justifyContent:'flex-start', */
+    align-Items: 'center';
+     /* marginHorizontal: 20, */
+    height: 100;
+     /* flex:0.8, */
+  }
+
+  .details {
+    flex-Direction: 'row';
+    justify-Content: 'space-between';
+    margin-Top: 10;
+  }
+  .target {
+    font-Size: 15;
+     /* alignItems:'flex-start'; */
+  }
+  .raised {
+    font-Size: 15,
+     /* alignItems:'flex-end' */
+  }
+  .over {
+    flex: 1;
+     /* justifyContent:'flex-start', */
+     /* marginTop: 30, */
+    align-Items: 'center';
+     /* padding:20 */
+    justify-Content: 'center',
+  }
+  .overh3 {
+    font-Size: 20;
+    line-Height: 30;
+  }
+  .Notfound {
+    flex: 1;
+    justify-Content: 'center';
+    align-Items: 'center';
+  }
+  /* model */
+  .modaldiv {
+    top: '0%';
+    justify-Content: 'center';
+    margin: 10;
+    background-Color: '#E6E6E6';
+    border-Radius: 20;
+    padding: 20;
+     /* alignItems: 'center', */
+ 
+    border-Color: 'grey';
+    border-Width: 1;
+  }
+  .filter{
+     padding: 20,
+  }

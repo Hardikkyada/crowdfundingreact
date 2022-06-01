@@ -1,0 +1,60 @@
+
+.product  {
+    box-shadow: 'black';
+    height: 300;
+    margin: 20;
+  };
+   .tochabale  {
+    overflow: 'hidden';
+    border-Radius: 10;
+  };
+   .img  {
+    width: '100%';
+    height: '100%';
+    resize: 'stretch';
+  };
+   .title  {
+    font-Size: 18,
+    /* margin-Vertical: 4, */
+     /* fontFamily:'Roboto-Black' */
+  };
+   .price  {
+    font-Size: 14;
+    color: '#888';
+  };
+   .actions  {
+    background-color: black;
+    display:flex;
+    height: '23%';
+    align-Items: 'center';
+    flex-direction: row
+    /* paddingHorizontal: 20; */
+    /* borderWidth:5, */
+  };
+  .details  {
+     /* justifyContent:'center' */
+    align-Items: 'center';
+    height: '17%';
+    padding: 10,
+  };
+   .imgcon  {
+    width: '100%';
+    height: '60%';
+    border-top-left-radius: 10;
+    border-top-right-radius: 10;
+    overflow: 'hidden',
+     /* justifyContent:'center', */
+     /* alignItems:'center' */
+  };
+   .btn  {
+    border-Radius: 10,
+  };
+   .amount  {
+    flex-Direction: 'row';
+    align-Items: 'center',
+  };
+   .createby  {
+     /* fontFamily: 'Roboto-Black', */
+     margin-Left: 20;
+     color: 'rgb(105,103,103)';
+  };

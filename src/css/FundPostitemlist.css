@@ -1,0 +1,42 @@
+.product  {
+  box-shadow: 'black';
+  height: 100;
+  margin: 20;
+};
+ .tochabale  {
+  overflow: 'hidden';
+  border-Radius: 10;
+};
+.row {
+  flex-Direction: 'row',
+};
+
+ .title  {
+  font-Size: 18,
+  /* margin-Vertical: 4, */
+   /* fontFamily:'Roboto-Black' */
+};
+ .price  {
+  font-Size: 14;
+  color: '#888';
+};
+.details  {
+  justify-Content:'center';
+ /* align-Items: 'center'; */
+ /* height: '17%'; */
+ padding: 10;
+ width: '50%',
+};
+
+imgcon  {
+  width: '50%';
+  height: '100%';
+  border-top-left-radius: 10;
+  border-top-right-radius: 10;
+  overflow: 'hidden',
+   /* justifyContent:'center', */
+   /* alignItems:'center' */
+};
+ .btn  {
+  border-Radius: 10,
+};

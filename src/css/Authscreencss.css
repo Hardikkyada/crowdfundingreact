@@ -1,0 +1,60 @@
+
+.screen{
+    flex: 1;
+    justify-Content: 'center';
+  }
+  .authcon {
+    justify-Content: 'center';
+    align-Items:'center';
+    padding: 20;
+  };
+  .buttonContainer {
+    margin-Top: 10;
+  };
+  .imgcont {
+    justify-Content: 'center';
+    align-Items: 'center';
+    padding: 10;
+    overflow: 'hidden';
+  }
+  .img{
+    width: 100px;
+    height: 100px;
+    border-Radius: 100px;
+  }
+  .loginimg {
+    flex:1;
+    justify-Content: 'center';
+    align-Items: 'center';
+  }
+  .btn {
+    border-Radius: 10;
+  }
+  .password {
+    /* flex-direction: 'row'; */
+    /* margin-top: 10px; */
+  };
+  .eye {
+    padding: 10;
+    margin: 5;
+    height: 25;
+    width: 25;
+    align-Items: 'center';
+    position: 'absolute';
+    right: 10;
+    top: 20;
+  };
+
+  .modalView {
+    top: '0%';
+    justify-content: 'center';
+    margin: 20;
+    background-color: '#E6E6E6';
+    border-radius: 20;
+    padding: 35;
+    border-Color: 'grey';
+    border-Width: 1;
+  };
+  .filter {
+    padding: 20;
+  };

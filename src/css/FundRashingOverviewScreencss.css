@@ -1,0 +1,93 @@
+.mainscreen {
+    flex: 1;
+    justify-Content: center;
+    /* background-color: black; */
+  }
+
+  .searchbar {
+    /* padding-Horizontal: 20; */
+    /* padding: 10px; */
+    /* padding-inline-start: 20px; */
+    padding: 10px;
+    padding-inline: 20px;
+    display: flex;
+    margin-Top: 10px;
+    flex-Direction: row;
+  }
+  .list {
+    /* display: flex; */
+
+    /* z-index: 1; */
+  }
+  .fab {
+    position: absolute;
+    margin: 16px;
+    right: 10px;
+    bottom: 20px;
+  }
+  .containerStyle {background-Color:white; padding: 20px};
+
+  .filter {
+    padding: 20px;
+  };
+  .topic {
+    flex-Direction: row;
+    justify-Content: center;
+    /* padding-Horizontal: 20; */
+    align-Items: center;
+    background-Color: 'rgba(98; 0; 238;0.2)';
+    margin-Top: 10px;
+    align-Content: stretch;
+  };
+  .btn {
+    border-Radius: 10px;
+  };
+  .modaldiv {
+    /* top: '100%'; */
+    /* justify-Content: center; */
+    margin-left: 50px;
+    /* background-Color: '#E6E6E6'; */
+    /* background-color: black !important; */
+    border-Radius: 100px;
+    padding: 35px;
+    align-Items: center !important;
+  };
+  .buttonOpen {
+    background-Color: '#F194FF';
+  };
+  .buttonClose {
+    background-Color: '#2196F3';
+  };
+  .divStyle {
+    color: white;
+    font-Weight: bold;
+    align-items: center;
+  };
+  .modaldiv {
+    margin-Bottom: 15px;
+    align-items: center;
+  }
+  .card {
+    margin-Top: 10px;
+    margin-Left: 10px;
+    margin-Bottom: 5px;
+    align-Self: baseline;
+    padding: 10px;
+    flex-Direction: row;
+  }
+  .Notfound {
+    display: flex;
+    justify-Content: center;
+    align-Items: center;
+  }
+  .modal{
+    position: 'absolute';
+    top: '50%';
+    left: '50%';
+    transform: 'translate(-50%, -50%)';
+    width: 400;
+    background-color: 'background.paper';
+    border: '2px solid #000';
+    box-shadow: 24;
+    position: 4,
+  }
