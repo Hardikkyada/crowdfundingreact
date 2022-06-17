@@ -15,6 +15,7 @@ import MakeFunRashingPost from '../screens/Fund/MakeFunRashingPost';
 import AuthScreen from '../screens/user/AuthScreen';
 import Logout from '../screens/user/Logout';
 import Profilescreen from '../screens/user/Profilescreen';
+import ViewOwnPost from '../screens/user/ViewOwnPost';
 import {Gettopicdata, setpostdata} from '../store/scllie/Fundpost';
 import {SETTOKEN, SETUSER} from '../store/scllie/user';
 
@@ -61,8 +62,12 @@ const Navigate = () => {
         <Route path="/" element={<AuthScreen />} />
         <Route path="/home" element={<FundRashingOverviewScreen />} />
         <Route path="/Profile" element={<Profilescreen />} />
-        <Route path="/DonationDetails/:id" element={<DonationpaymentScreen />} />
+        <Route
+          path="/DonationDetails/:id"
+          element={<DonationpaymentScreen />}
+        />
         <Route path="/Makepost" element={<MakeFunRashingPost />} />
+        <Route path="/ViewOwnPost" element={<ViewOwnPost />} />
         <Route path="/Makepost/:id" element={<MakeFunRashingPost />} />
         <Route
           path="/FundDetails/:id"

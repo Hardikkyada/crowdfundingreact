@@ -5,6 +5,7 @@ const initialState = {
   users: [],
   userpost: [],
   token: '',
+  error: '',
 };
 
 export const user = createSlice({
@@ -15,14 +16,10 @@ export const user = createSlice({
       state.users = action.payload;
     },
     LOGIN: (state, action) => {
-      // console.log('state', state.users);
-      // const user = {
-      //   email: action.payload.email,
-      //   password: action.payload.password,
-      // };
       console.log(action.payload);
       state.users = action.payload.user;
       state.token = action.payload.token;
+      state.error = '';
     },
     SIGNUP: (state, action) => {
       // console.log(state.users);
@@ -32,11 +29,24 @@ export const user = createSlice({
       console.log(action.payload);
       state.users = action.payload.user;
       state.token = action.payload.token;
+      state.error = '';
     },
     SETTOKEN: (state, action) => {
       state.token = action.payload;
+      state.error = '';
+    },
+    SETERROR: (state, action) => {
+      state.error = action.payload;
+    },
+    SETPOST: (state, action) => {
+      state.userpost = action.payload;
     },
   },
+  // extraReducers:{
+  //   [LOGIN.fullfilled]:(state.action) => {
+  //     state.error = ""
+  //   }
+  // }
 });
 
 // Action creators are generated for each case reducer function
@@ -51,7 +61,8 @@ export const CheckLogin = userdata => {
         dispatch(LOGIN(res.data));
       })
       .catch(e => {
-        console.log(e);
+        console.log(e.response.data.error);
+        dispatch(SETERROR(e.response.data.error));
       });
   };
 };
@@ -67,11 +78,31 @@ export const CheckReg = userdata => {
         dispatch(SIGNUP(res.data));
       })
       .catch(e => {
-        console.log(e);
+        console.log(e.response.data.error);
+        dispatch(SETERROR(e.response.data.error));
       });
   };
 };
 
-export const {LOGIN, SIGNUP, SETTOKEN, SETUSER} = user.actions;
+export const setpostdata = id => {
+  return dispatch => {
+    Authuser.get('/getuserPost/' + id)
+      .then(res => {
+        // console.log(res.data);
+        dispatch(SETPOST(res.data.data));
+      })
+      .catch(e => {
+        if (e.response.status === 404) {
+          console.log('Data Not Found');
+          dispatch(SETPOST([]));
+          return;
+        }
+        // throw new Error(e);
+      });
+  };
+};
+
+export const {LOGIN, SIGNUP, SETTOKEN, SETUSER, SETERROR, SETPOST} =
+  user.actions;
 
 export default user.reducer;

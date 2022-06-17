@@ -210,7 +210,7 @@ const MakeFunRashingPost = props => {
       setTimeout(() => {
         navigate('/home');
         console.log('navigate');
-      }, 3000);
+      }, 2000);
     }
   };
 
@@ -233,8 +233,8 @@ const MakeFunRashingPost = props => {
 
   return (
     <>
-      <Snackbar open={open} autoHideDuration={4000} onClose={snackbar}>
-        <Alert onClose={snackbar} severity="success" sx={{width: '100%'}}>
+      <Snackbar open={open} autoHideDuration={4000}>
+        <Alert severity="success" sx={{width: '100%'}}>
           Data Added successfully!
         </Alert>
       </Snackbar>

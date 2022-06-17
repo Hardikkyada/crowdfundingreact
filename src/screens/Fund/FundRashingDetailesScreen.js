@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemText,
   Modal,
+  Paper,
   Skeleton,
   Typography,
 } from '@mui/material';
@@ -36,10 +37,15 @@ const FundRashingDetailesScreen = props => {
   const pid = params.id;
   console.log(pid);
 
-  let curentpost = useSelector(state =>
-    state.Fundpost.FundPost.find(i => i._id === pid),
-  );
-
+  let curentpost = useSelector(state => {
+    const x = state.Fundpost.FundPost.find(i => i._id === pid);
+    if (!x) {
+      return state.user.userpost.find(i => i._id === pid);
+    } else {
+      return x;
+    }
+  });
+  console.log('/*/*/*/*/*/*/*/*/', curentpost);
   const user = useSelector(state => state.user.users);
 
   if (!curentpost) {
@@ -147,20 +153,16 @@ const FundRashingDetailesScreen = props => {
             </Grid>
 
             {console.log(
-              curentpost.amount,
+              curentpost?.amount,
               amount,
-              (curentpost.amount * 100) / amount,
+              (curentpost?.amount * 100) / amount,
             )}
 
             <Grid item md={12} sx={{paddingInline: 5}}>
               <Box sx={{width: '100%'}}>
                 <LinearProgress
                   variant="determinate"
-                  value={
-                    amount
-                      ? (amount * 100) / curentpost.amount
-                      : ''
-                  }
+                  value={amount ? (amount * 100) / curentpost?.amount : ''}
                 />
               </Box>
             </Grid>
@@ -185,12 +187,9 @@ const FundRashingDetailesScreen = props => {
               <Button
                 className="btn"
                 disabled={user?._id === curentpost?.user._id ? true : false}
-                onPress={() => {
+                onClick={() => {
                   //dispatch(cartActions.addtocart(curentpost));
-                  navigate('DonationDetails', {
-                    fundpostid: pid,
-                    name: props.route.params.name,
-                  });
+                  navigate('/DonationDetails/' + pid);
                 }}
                 mode="contained">
                 Donate
@@ -215,19 +214,28 @@ const FundRashingDetailesScreen = props => {
             variant="h6"
             component="h2"
             ml={12}>
-            Supports's
+            Supporters
           </Typography>
           <Typography id="modal-modal-description" sx={{mt: 2, ml: 5}}>
-            <List sx={{width: '100%', maxWidth: 360, bgcolor: 'GrayText'}}>
+            <List
+              sx={{
+                width: '100%',
+                maxWidth: 360,
+                maxHeight: 300,
+                position: 'relative',
+                overflow: 'auto',
+              }}>
               {userlist && userlist.length > 0 ? (
                 userlist.map(itemdata => (
-                  <ListItem key={itemdata._id}>
-                    <ListItemText
-                      sx={{ml: 2, borderWidth: 0, height: 30, fontSize: 20}}
-                      primary={itemdata.name}
-                      secondary={`Donate Amount : ${itemdata.Totalamount}`}
-                    />
-                  </ListItem>
+                  <Paper elevation={20} sx={{m: 2}}>
+                    <ListItem key={itemdata._id}>
+                      <ListItemText
+                        sx={{ml: 2, borderWidth: 0, height: 30, fontSize: 20}}
+                        primary={itemdata.name}
+                        secondary={`Donate Amount : ${itemdata.Totalamount}`}
+                      />
+                    </ListItem>
+                  </Paper>
                 ))
               ) : (
                 <div

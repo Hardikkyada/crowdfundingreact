@@ -7,7 +7,6 @@ import {storage} from '../../../firebase';
 import {getDownloadURL, ref} from 'firebase/storage';
 import {
   Alert,
-  Box,
   Button,
   Skeleton,
   Card,
@@ -31,7 +30,6 @@ const FundPostitem = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log(props);
     Authuser.get('/totalfund/' + props.item._id).then(res => {
       const avg = (res.data.data * 100) / props.item.amount;
 
@@ -107,7 +105,7 @@ const FundPostitem = props => {
       <Card
         sx={{
           maxWidth: 345,
-          height:300,
+          height: 300,
           cursor: 'pointer',
         }}
         onClick={props.onSelect}>
@@ -129,7 +127,7 @@ const FundPostitem = props => {
             image={imgurl}
           />
         )}
-        <CardContent sx={{height:'10%'}}>
+        <CardContent sx={{height: '10%'}}>
           <Typography gutterBottom variant="h5" component="div"></Typography>
           <Typography variant="body2" color="text.secondary">
             <div className="details">
@@ -195,7 +193,7 @@ const FundPostitem = props => {
 
             {props.isEdit && (
               <Button
-                style="btn"
+                className="btn"
                 mode="contained"
                 title="Edit"
                 onClick={() =>

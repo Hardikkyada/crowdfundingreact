@@ -124,7 +124,7 @@ const FundRashingOverviewScreen = props => {
             </FormControl>
           </Grid>
           <Grid item md={4} xs={3}>
-            <Typography sx={{textAlign: 'left', mt: 2, ml: 2}}>
+            <Typography  sx={{textAlign: 'left', mt: 2, ml: 2}}>
               {loading ? <CircularProgress size={25} /> : undefined}
             </Typography>
           </Grid>
@@ -134,7 +134,6 @@ const FundRashingOverviewScreen = props => {
           md={1}
           xs={1}
           mt={1.5}
-          direction="row"
           justifyContent="flex-start">
           <img
             onClick={() => setModalVisible(!modalVisible)}
@@ -145,9 +144,7 @@ const FundRashingOverviewScreen = props => {
 
         {!fundpost && (
           <Grid item md={12} sm={12} xs={12} mt={2}>
-            {/* <div className="Notfound"> */}
-            <div style={{fontSize: 20}}>Not Data Found</div>
-            {/* </div> */}
+            <Typography style={{fontSize: 20}}>Not Data Found</Typography>
           </Grid>
         )}
       </Grid>
@@ -203,7 +200,7 @@ const FundRashingOverviewScreen = props => {
                 </Select>
               </FormControl>
 
-              <div>
+              <>
                 <Button
                   onClick={() => sorting(value)}
                   mode="contained"
@@ -221,7 +218,7 @@ const FundRashingOverviewScreen = props => {
                   style={{marginLeft: 10}}>
                   Cancel
                 </Button>
-              </div>
+              </>
             </Typography>
           </Box>
         </Modal>

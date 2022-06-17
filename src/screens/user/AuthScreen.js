@@ -9,8 +9,14 @@ import {
   Select,
   TextField,
   IconButton,
+  Grid,
+  Paper,
+  CircularProgress,
+  Snackbar,
 } from '@mui/material';
-import React, {useEffect, useState, useRef} from 'react';
+import MuiAlert from '@mui/material/Alert';
+
+import React, {useEffect, useState, useRef, forwardRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Authuser from '../../api/Authuser';
 import '../../css/Authscreencss.css';
@@ -20,14 +26,17 @@ import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 import {CheckLogin, CheckReg} from '../../store/scllie/user';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {useNavigate} from 'react-router-dom';
+import {Box} from '@mui/system';
 
 const AuthScreen = props => {
   let token = useSelector(state => state.user.token);
-  useEffect(() => {
-    if (token) {
-      navigate('/home');
-    }
-  }, [token]);
+  let Reducererror = useSelector(state => state.user.error);
+
+  // useEffect(() => {
+  //   if (token) {
+  //     navigate('/home');
+  //   }
+  // }, [token]);
 
   console.log('Authuser', token);
   const dispatch = useDispatch();
@@ -35,33 +44,44 @@ const AuthScreen = props => {
   const inputFile = useRef(null);
 
   const [isloding, setisloding] = useState(false);
+  const [touched, setTouched] = useState(false);
   const [error, seterror] = useState();
-  const [loerror, loseterror] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [img, setimg] = useState('default.png');
   const [selimg, setselimg] = useState(false);
   const [assets, setassets] = useState();
   const [imgurl, setimgurl] = useState();
-
   const [name, setname] = useState('');
+  const [nameIsValid, setNameIsValid] = useState(true);
   const [Surname, setsurname] = useState('');
+  const [surnameIsValid, setsurnameIsValid] = useState(true);
   const [mobileno, setmno] = useState('');
+  const [moIsValid, setmoIsValid] = useState(true);
   const [email, setemail] = useState('');
+  const [emailIsValid, setEmailIsValid] = useState(true);
+  const [genIsValid, setgenIsValid] = useState(true);
   const [password, setpassword] = useState('');
+  const [passIsValid, setpassIsValid] = useState(true);
   const [refreshing, setRefreshing] = useState(true);
   const [showpassword, setshowpassword] = useState(false);
+  const [formvalid, setformvalid] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState('');
+  const [snackbar, setsnacbar] = useState(false);
+  const [snackerrormsg, setsnackerrormsg] = useState('');
+  const [loerror, loseterror] = useState(false);
+
+  const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
   let filename = '';
-  useEffect(() => {
-    if (error) {
-      // Alert.alert('An Error', error, [{text: 'okay'}]);
-      console.log(error);
-    }
-  }, [error]);
 
   const getimage = async file => {
+    console.log(file, !imgurl);
+    if (file === 'default.png' && imgurl) {
+      return;
+    }
     try {
       // const storageref = ref(storage,'/profile/'+file)
       const image = await getDownloadURL(ref(storage, 'profile/' + file));
@@ -81,7 +101,7 @@ const AuthScreen = props => {
   };
 
   const setimage = () => {
-    console.log(selimg);
+    // console.log(imgurl,selimg);
     if (!selimg) {
       // setimg(user.ProfileImg);
       // console.log("false",API_URL + `image/${userdata.ProfileImg}`);
@@ -111,50 +131,60 @@ const AuthScreen = props => {
       .catch(e => console.log('uploading image error => ', e));
   };
 
-  const authHandler = async () => {
-    console.log(!filename);
+  const authHandler = async e => {
+    e.preventDefault();
+    console.log('shiudsiufh');
     let action;
     if (isSignup) {
       // action = SIGNUP({
-
-      uplodeimage(assets);
-
-      if (
-        name !== '' &&
-        Surname !== '' &&
-        email !== '' &&
-        password !== '' &&
-        mobileno !== '' &&
-        value !== ''
-      ) {
-        console.log('********');
-        if (!filename) {
-          return alert('Please add Profile Image');
-        } else {
-          // action = useraction.Signup({
-          action = CheckReg({
-            name: name,
-            ProfileImg: filename,
-            Surname: Surname,
-            mobileno: mobileno,
-            email: email,
-            password: password,
-            gender: value,
-          });
-        }
+      if (assets) {
+        uplodeimage(assets);
       } else {
-        console.log(name, Surname, filename, email, password, mobileno);
-        alert("You Can' Add Empty Data");
+        showsnackbar('Please add Profile Image');
         return;
       }
+      if (
+        nameIsValid &&
+        surnameIsValid &&
+        emailIsValid &&
+        passIsValid &&
+        moIsValid &&
+        genIsValid
+      ) {
+        // action = useraction.Signup({
+        action = CheckReg({
+          name: name,
+          ProfileImg: filename,
+          Surname: Surname,
+          mobileno: mobileno,
+          email: email,
+          password: password,
+          gender: value,
+        });
+        console.log('dsd', action);
+      } else {
+        // console.log(name, Surname, filename, email, password, mobileno);
+        if (!passIsValid) {
+          showsnackbar('PassWord Must Be 7 Characters');
+          return;
+        } else {
+          showsnackbar('All Fileds are required');
+          return;
+        }
+      }
     } else {
-      if (email !== '' && password !== '') {
+      if (!emailIsValid) {
+        showsnackbar('Email Not Valid');
+      } else if (emailIsValid) {
         // action = useraction.Login({
         // login({
         action = CheckLogin({
-          email: email,
-          password: password,
+          email,
+          password,
         });
+      } else {
+        showsnackbar('All fileds are required');
+        // return alert('All fileds are required', 'error');
       }
     }
 
@@ -167,6 +197,7 @@ const AuthScreen = props => {
       // await action
       // dispatch(useraction.Login())
     } catch (err) {
+      console.log(err);
       seterror(err.message);
     }
     setTimeout(() => {
@@ -201,7 +232,7 @@ const AuthScreen = props => {
   const Viewpass = () => {
     setshowpassword(!showpassword);
   };
-  const onClick = e => {
+  const onImgClick = e => {
     inputFile.current.click();
   };
   const getPhoto = e => {
@@ -216,161 +247,294 @@ const AuthScreen = props => {
     return () => URL.revokeObjectURL(objectUrl);
   };
 
+  //Validations
+  const changeNameHandler = event => {
+    setname(event.target.value);
+    if (event.target.value.length > 0) {
+      setNameIsValid(true);
+    } else {
+      setNameIsValid(false);
+      setformvalid(false);
+    }
+  };
+
+  const changesurNameHandler = event => {
+    setsurname(event.target.value);
+    if (event.target.value.length > 0) {
+      setsurnameIsValid(true);
+      setformvalid(true);
+    } else {
+      setsurnameIsValid(false);
+    }
+  };
+
+  const changemnoHandler = event => {
+    setmno(event.target.value);
+    if (event.target.value.length === 10) {
+      setmoIsValid(true);
+    } else {
+      setmoIsValid(false);
+    }
+  };
+
+  const changeEmailHandler = event => {
+    setemail(event.target.value);
+    if (
+      event.target.value
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        )
+    ) {
+      setEmailIsValid(true);
+    } else {
+      setEmailIsValid(false);
+    }
+  };
+
+  const changePasswordHandler = event => {
+    setpassword(event.target.value);
+    if (event.target.value.length >= 7) {
+      setpassIsValid(true);
+    } else {
+      setpassIsValid(false);
+    }
+  };
+
+  const changeGenderHandler = event => {
+    setValue(event.target.value);
+    if (event.target.value.length > 0) {
+      setgenIsValid(true);
+    } else {
+      setgenIsValid(false);
+    }
+  };
+
+  const showsnackbar = errormsg => {
+    console.log(errormsg);
+    setsnackerrormsg(errormsg);
+    setsnacbar(true);
+    setTimeout(() => {
+      setsnackerrormsg('');
+    }, 5000);
+  };
+
   return (
-    <div className="screen">
-      {!isSignup && (
-        <div className="loginimg">
-          <img
-            src={require('../../img/login2.gif')}
-            style={{width: '20%', height: '20%'}}
-          />
-        </div>
-      )}
-      <div className="authcon">
-        <form method="post">
-          <input
-            type="file"
-            name="image"
-            ref={inputFile}
-            style={{display: 'none'}}
-            onChange={getPhoto}
-          />
-          {isSignup && (
-            <div onClick={onClick} className="imgcont">
-              <img className="img" src={setimage()} />
-            </div>
-          )}
-          {isSignup && (
-            <div className="textfiled">
-              <FormControl sx={{m: 0.5, width: '25ch'}} variant="outlined">
+    <>
+      <Snackbar
+        open={snackbar || loerror}
+        onClose={() => setsnacbar(false)}
+        autoHideDuration={4000}
+        anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+        <Alert severity="error" sx={{width: '100%'}}>
+          {snackerrormsg ? snackerrormsg : Reducererror}
+        </Alert>
+      </Snackbar>
+      {/* <Grid
+        container
+        spacing={2}
+        sx={{display: 'block', justifyContent: 'center', mt: 5}}> */}
+      {/* <form method="post"> */}
+      <Box
+        component="form"
+        onSubmit={authHandler}
+        // sx={{mt: 3, width: {xs: '80%', md: '40%'}}}
+        sx={{display: 'flex', justifyContent: 'center'}}
+        // onClick={() => setTouched(true)}
+      >
+        <Paper
+          variant="outlined"
+          sx={{width: {xs: '80%', md: '40%'}, p: 2, m: 2}}>
+          <Grid container spacing={1.5}>
+            <input
+              type="file"
+              name="image"
+              ref={inputFile}
+              style={{display: 'none'}}
+              onChange={getPhoto}
+            />
+
+            {!isSignup && (
+              <Grid item md={12} sm={12} xs={12}>
+                <div className="loginimg">
+                  <img
+                    src={require('../../img/login2.gif')}
+                    style={{width: '50%', height: '50%'}}
+                  />
+                </div>
+              </Grid>
+            )}
+            {isSignup && (
+              <Grid item md={12} sm={12} xs={12} sx={{p: 0.5}}>
+                <div onClick={() => onImgClick()} className="imgcont">
+                  <img className="img" src={setimage()} />
+                </div>
+              </Grid>
+            )}
+            {isSignup && (
+              <Grid item md={12} sm={12} xs={12}>
                 <TextField
+                  error={!nameIsValid}
+                  color="success"
+                  helperText={nameIsValid ? '' : 'Name is required'}
                   id="name"
+                  // helperText="sdfsd"
                   label="Name"
                   required
+                  fullWidth
                   autoCapitalize="none"
-                  onChange={e => setname(e.target.value)}
+                  onChange={changeNameHandler}
+                  onBlur={changeNameHandler}
                 />
-              </FormControl>
-            </div>
-          )}
-          {isSignup && (
-            <div className="textfiled">
-              <FormControl sx={{m: 0.5, width: '25ch'}} variant="outlined">
+              </Grid>
+            )}
+            {isSignup && (
+              <Grid item md={12} sm={12} xs={12}>
                 <TextField
                   id="surname"
                   label="Surname"
                   required
-                  autoCapitalize="none"
-                  onChange={e => setsurname(e.target.value)}
+                  fullWidth
+                  error={!surnameIsValid}
+                  color="success"
+                  helperText={!surnameIsValid ? 'SurName is required' : ''}
+                  onChange={changesurNameHandler}
+                  onBlur={changesurNameHandler}
                 />
-              </FormControl>
-            </div>
-          )}
-          {isSignup && (
-            <div className="textfiled">
-              <FormControl sx={{m: 0.5, width: '25ch'}} variant="outlined">
+              </Grid>
+            )}
+            {isSignup && (
+              <Grid item md={12} sm={12} xs={12}>
                 <TextField
                   id="mno"
                   label="Mobile No"
                   required
+                  fullWidth
+                  inputProps={{
+                    pattern: '[6-9]{1}[0-9]{9}',
+                  }}
                   // error="Enter Valid Mobile No"
                   style={{borderRadius: 10}}
-                  onChange={e => setmno(e.target.value)}
+                  error={!moIsValid}
+                  color="success"
+                  helperText={
+                    !moIsValid
+                      ? 'Mobile No should start with number 6-9 and contain 10 digits'
+                      : ''
+                  }
+                  onChange={changemnoHandler}
+                  onBlur={changemnoHandler}
                 />
-              </FormControl>
-            </div>
-          )}
-          <div className="textfiled">
-            <FormControl sx={{m: 0.5, width: '25ch'}} variant="outlined">
+              </Grid>
+            )}
+            <Grid item md={12} sm={12} xs={12}>
               <TextField
                 id="email"
                 label="E-Mail"
                 required
+                fullWidth
                 autoCapitalize="none"
-                onChange={e => setemail(e.target.value)}
+                error={!emailIsValid}
+                color="success"
+                helperText={!emailIsValid ? 'Please Enter Valid Email' : ''}
+                onChange={changeEmailHandler}
+                onBlur={changeEmailHandler}
               />
-            </FormControl>
-          </div>
-          {isSignup && (
-            <div className="textfiled">
-              <FormControl sx={{m: 0.5, width: '25ch'}} variant="outlined">
-                <InputLabel id="demo-simple-select-label">
-                  Select Gender
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Select Gender"
-                  onChange={e => setValue(e.target.value)}>
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-          )}
-          <div className="password">
-            <FormControl sx={{m: 0.5, width: '25ch'}} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={showpassword ? 'text' : 'password'}
-                value={password}
-                onChange={e => setpassword(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={Viewpass}
-                      // onMouseDown={Viewpass}
-                      edge="end">
-                      {showpassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-            </FormControl>
-          </div>
-          <div className="buttonContainer">
-            {!isSignup && loerror && (
-              <div className={{color: 'red', fontSize: 15}}>
-                Wrong Id and Password
-              </div>
+            </Grid>
+            {isSignup && (
+              <Grid item md={12} sm={12} xs={12}>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id="demo-simple-select-label">
+                    Select Gender
+                  </InputLabel>
+                  <Select
+                    defaultValue=""
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Select Gender"
+                    error={!genIsValid}
+                    color="success"
+                    onChange={changeGenderHandler}
+                    onBlur={changeGenderHandler}>
+                    <MenuItem value="male">Male</MenuItem>
+                    <MenuItem value="female">Female</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
             )}
-
-            <Button
-              // color={Color.primary}
-              className="btn"
-              onClick={authHandler}
-              mode="contained">
-              {isSignup ? 'Sign Up' : 'Login'}
-            </Button>
+            <Grid item md={12} sm={12} xs={12}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Password
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showpassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  error={!passIsValid}
+                  color="success"
+                  onChange={changePasswordHandler}
+                  onBlur={changePasswordHandler}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => Viewpass()}
+                        // onMouseDown={Viewpass}
+                        edge="end">
+                        {showpassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+            </Grid>
+            {/* {!isSignup && Reducererror ? showsnackbar(Reducererror) : ''} */}
+            <Grid item md={12} sm={12} xs={12}>
+              {isloding ? (
+                <CircularProgress size={25} />
+              ) : (
+                <Button
+                  type="submit"
+                  // disabled={formvalid}
+                  className="btn"
+                  variant="contained">
+                  {isSignup ? 'Sign Up' : 'Login'}
+                </Button>
+              )}
+            </Grid>
 
             {!isSignup && (
-              <div className="buttonContainer">
-                <Button
-                  // color={Color.primary}
-                  className="btn"
-                  onClick={() => setModalVisible(!modalVisible)}>
-                  Forget Password
-                </Button>
-              </div>
+              <Grid item md={12} sm={12} xs={12} sx={{mt: -2}}>
+                <div className="buttonContainer">
+                  <Button
+                    // color={Color.primary}
+                    className="btn"
+                    onClick={() => setModalVisible(!modalVisible)}>
+                    Forget Password
+                  </Button>
+                </div>
+              </Grid>
             )}
-          </div>
-          <div className="buttonContainer">
-            <Button
-              className="btn"
-              onClick={() => {
-                setIsSignup(prevState => !prevState);
-              }}>{`${
-              !isSignup ? "Don't have an Account?" : 'Already Have an Account?'
-            }`}</Button>
-          </div>
-        </form>
-      </div>
-    </div>
+            <Grid item md={12} sm={12} xs={12} sx={{mt: -2}}>
+              <Button
+                className="btn"
+                onClick={() => {
+                  setIsSignup(prevState => !prevState);
+                }}>{`${
+                !isSignup
+                  ? "Don't have an Account?"
+                  : 'Already Have an Account?'
+              }`}</Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Box>
+
+      {/* </form> */}
+    </>
   );
 };
 
